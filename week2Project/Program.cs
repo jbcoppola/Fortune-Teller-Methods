@@ -12,11 +12,8 @@ namespace week1project
 		{
 			string input = "";
 			bool endQuit = false;
-			while (input != "quit" && endQuit == false)
-			{
-				Console.WriteLine("Welcome to the Fortune Teller. Type \"quit\" to quit, or \"restart\" to restart.");
 
-				string[] questionArray =
+			string[] questionArray =
 				{
 					"Enter your first name.",
 					"Enter your last name.",
@@ -26,85 +23,73 @@ namespace week1project
 					"Enter how many siblings you have."
 				};
 
-				//breaks and continue can't be used in a method to break from the while loop, so we have to repeat code after each method call
-				//this also prevents using a for loop, since it needs to exit immediately
-				input = Program.Question(questionArray[0]);
-				if (input.ToLower() == "quit")
-				{
-					break;
-				}
-				else if (input.ToLower() == "restart")
-				{
-					continue;
-				}
-				string firstName = input;
+			while (input != "quit" && endQuit == false)
+			{
+				//for the "restart" goto
+				Start:
+				Console.WriteLine("Welcome to the Fortune Teller. Type \"quit\" to quit, or \"restart\" to restart.");
 
-				input = Program.Question(questionArray[1]);
-				if (input.ToLower() == "quit")
-				{
-					break;
-				}
-				else if (input.ToLower() == "restart")
-				{
-					continue;
-				}
-				string lastName = input;
+				string firstName = "";
+				string lastName = "";
+				int age = 0;
+				int birthMonth = 0;
+				int siblings = 0;
+				string color = "";
 
-				Console.WriteLine(Greeter(firstName, lastName));
-
-				input = Program.Question(questionArray[2]);
-				if (input.ToLower() == "quit")
+				//since all the inputs are different data types we can't just put them in an array, so we have the ugly solution
+				//of an if followed by a switch within the loop for each question
+				
+				//asks each question, then assigns it to the appropriate variable
+				for (int i = 0; i < questionArray.Length; i++)
 				{
-					break;
-				}
-				else if (input.ToLower() == "restart")
-				{
-					continue;
-				}
-				int age = int.Parse(input);
-
-				input = Program.Question(questionArray[3]);
-				if (input.ToLower() == "quit")
-				{
-					break;
-				}
-				else if (input.ToLower() == "restart")
-				{
-					continue;
-				}
-				int birthMonth = int.Parse(input);
-
-				input = Program.Question(questionArray[4]);
-				string color = input;
-				while (color.ToLower() == "help")
-				{
-					Console.WriteLine("ROYGBIV is the color spectrum. It consists of:\n\n" +
+					input = Program.Question(questionArray[i]);
+					if (input.ToLower() == "quit")
+					{
+						//the only way to get out of the while loop without repeating a ton of code I could find
+						goto Finish; //after the while loop
+					}
+					else if (input.ToLower() == "restart")
+					{
+						goto Start; //top of the while loop
+					}
+					else if (i == 4 && input.ToLower() == "help")
+					{
+						Console.WriteLine("ROYGBIV is the color spectrum. It consists of:\n\n" +
 										"Red\nOrange\nYellow\nGreen\nBlue\nIndigo\nViolet\n\n" +
 										"Type your favorite one of these colors.");
 
-					color = Console.ReadLine();
-				};
-				input = color;
-				if (input.ToLower() == "quit")
-				{
-					break;
-				}
-				else if (input.ToLower() == "restart")
-				{
-					continue;
+						input = Console.ReadLine();
+					}
+
+					switch (i)
+					{
+						case 0:
+							input = firstName;
+							break;
+						case 1:
+							input = lastName;
+							Greeter(firstName, lastName);
+							break;
+						case 2:
+							age = int.Parse(input);
+							break;
+						case 3:
+							birthMonth = int.Parse(input);
+							break;
+						case 4:
+							color = input;
+							break;
+						case 5:
+							siblings = int.Parse(input);
+							break;
+						default:
+							break;
+					}
 				}
 
-				input = Program.Question(questionArray[5]);
-				if (input.ToLower() == "quit")
-				{
-					break;
-				}
-				else if (input.ToLower() == "restart")
-				{
-					continue;
-				}
-				int siblings = int.Parse(input);
-
+				//these four methods could technically all be type void by writing to Console.Writeline instead of
+				//returning a value, in which case they would simply be called in the writeline statement below.
+				//however, this would severely reduce readability
 				int retire = CalculateRetirement(age);
 				double bankCash = CalclulateCash(birthMonth);
 				string vacationHome = CalculateVacationHome(siblings);
@@ -115,6 +100,9 @@ namespace week1project
 				FortuneJudger();
 				endQuit = true;
 			}
+			//for the "quit" goto
+			Finish:
+
 			if (input.ToLower() == "quit")
 			{
 				Console.WriteLine("Nobody likes a quitter...");
@@ -179,39 +167,6 @@ namespace week1project
 			return vacationHome;
 		}
 
-		static string CalculateVehicle(string color)
-		{
-			string vehicle;
-			switch (color.ToLower())
-			{
-				case "red":
-					vehicle = "WW2 tank with live ammunition";
-					break;
-				case "orange":
-					vehicle = "steam train retrofitted with car tires";
-					break;
-				case "yellow":
-					vehicle = "very small and improprietously painted submarine";
-					break;
-				case "green":
-					vehicle = "blimp emblazoned with logo for the short-lived 1939 comedy troupe \"Axison Allies\"";
-					break;
-				case "blue":
-					vehicle = "pirate ship loaded with stolen Spanish silver. Avast";
-					break;
-				case "indigo":
-					vehicle = "featureless chrome orb that hovers ominiously over the road";
-					break;
-				case "violet":
-					vehicle = "purple Mini Cooper with wood siding";
-					break;
-				default:
-					vehicle = "squeaky shopping cart";
-					break;
-			}
-			return vehicle;
-		}
-
 		static double CalclulateCash(int birthMonth)
 		{
 			double bankCash;
@@ -266,6 +221,39 @@ namespace week1project
 					break;
 			}
 			Console.WriteLine(text);
+		}
+
+		static string CalculateVehicle(string color)
+		{
+			string vehicle;
+			switch (color.ToLower())
+			{
+				case "red":
+					vehicle = "WW2 tank with live ammunition";
+					break;
+				case "orange":
+					vehicle = "steam train retrofitted with car tires";
+					break;
+				case "yellow":
+					vehicle = "very small and improprietously painted submarine";
+					break;
+				case "green":
+					vehicle = "blimp emblazoned with logo for the short-lived 1939 comedy troupe \"Axison Allies\"";
+					break;
+				case "blue":
+					vehicle = "pirate ship loaded with stolen Spanish silver. Avast";
+					break;
+				case "indigo":
+					vehicle = "featureless chrome orb that hovers ominiously over the road";
+					break;
+				case "violet":
+					vehicle = "purple Mini Cooper with wood siding";
+					break;
+				default:
+					vehicle = "squeaky shopping cart";
+					break;
+			}
+			return vehicle;
 		}
 	}
 }
