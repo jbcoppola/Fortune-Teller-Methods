@@ -19,14 +19,14 @@ namespace week1project
 					"Enter your last name.",
 					"Enter your age.",
 					"Enter your birthmonth as a digit (1-12)",
-					"Enter your favorite ROYGBIV color (type 'help' if you do not know what this is)",
+					"Enter a ROYGBIV color, or two colors seperated by a space (type 'help' if you do not know what ROYGBIV is)",
 					"Enter how many siblings you have."
 				};
 
 			while (input != "quit" && endQuit == false)
 			{
-				//for the "restart" goto
-				Start:
+			//for the "restart" goto
+			Start:
 				Console.WriteLine("Welcome to the Fortune Teller. Type \"quit\" to quit, or \"restart\" to restart.");
 
 				string firstName = "";
@@ -34,11 +34,11 @@ namespace week1project
 				int age = 0;
 				int birthMonth = 0;
 				int siblings = 0;
-				string color = "";
+				string[] color = { "", "" };
 
-				//since all the inputs are different data types we can't just put them in an array, so we have the ugly solution
+				//since all the inputs are different data types we can't just put them in an array, leading to the ugly solution
 				//of an if followed by a switch within the loop for each question
-				
+
 				//asks each question, then assigns it to the appropriate variable
 				for (int i = 0; i < questionArray.Length; i++)
 				{
@@ -56,7 +56,7 @@ namespace week1project
 					{
 						Console.WriteLine("ROYGBIV is the color spectrum. It consists of:\n\n" +
 										"Red\nOrange\nYellow\nGreen\nBlue\nIndigo\nViolet\n\n" +
-										"Type your favorite one of these colors.");
+										"Type your favorite one or two of these colors.");
 
 						input = Console.ReadLine();
 					}
@@ -64,10 +64,10 @@ namespace week1project
 					switch (i)
 					{
 						case 0:
-							input = firstName;
+							firstName = input;
 							break;
 						case 1:
-							input = lastName;
+							lastName = input;
 							Greeter(firstName, lastName);
 							break;
 						case 2:
@@ -77,7 +77,7 @@ namespace week1project
 							birthMonth = int.Parse(input);
 							break;
 						case 4:
-							color = input;
+							color = input.Split(' ');
 							break;
 						case 5:
 							siblings = int.Parse(input);
@@ -93,8 +93,15 @@ namespace week1project
 				int retire = CalculateRetirement(age);
 				double bankCash = CalclulateCash(birthMonth);
 				string vacationHome = CalculateVacationHome(siblings);
-				string favoriteVehicle = CalculateVehicle(color);
-
+				string favoriteVehicle = "";
+				if (color[1] == "")
+				{
+					favoriteVehicle = CalculateVehicle(color[0]);
+				}
+				else
+				{
+					favoriteVehicle = CalculateVehicle(color[0], color[1]);
+				}
 				Console.WriteLine(firstName + ' ' + lastName + " will retire in " + retire + " years with $" + bankCash + " in the bank, " +
 									"a vacation home in " + vacationHome + " and a " + favoriteVehicle + '.');
 				FortuneJudger();
@@ -192,6 +199,7 @@ namespace week1project
 			return bankCash;
 		}
 
+		//prints one of 6 random fortunes
 		static void FortuneJudger()
 		{
 			Random rand = new Random();
@@ -255,6 +263,271 @@ namespace week1project
 			}
 			return vehicle;
 		}
+
+		static string CalculateVehicle(string color1, string color2)
+		{
+			color1.ToLower();
+			color2.ToLower();
+			int num = 49;
+
+			string[] vehicles =
+			{
+				"firetruck with a medieval siege catapult bolted to the extending ladder slot",
+				"several hundred stuffed animals wired together around a car frame and naked engine",
+				"chinese truck that compresses to the size of a suitcase if it gets into an accident",
+				"oil tanker filled with french fry grease",
+				"ethereal monorail of light. Costs 3.99 per ride",
+				"live 30 foot alligator trained to carry passengers",
+				"bright pink steamroller",
+				"motorcycle with a flaming, screaming skull fused to the wheelcase",
+				"broken time machine filled with empty food containers from 2399",
+				"laser pointer promotional car with rechargable gyroscopic\"sun beam\"",
+				"plastic human-sized hamster ball",
+				"treadmill on wheels",
+				"golf cart equipped with a racing engine",
+				"\"Blender,\" famous for seperating crash test dummies into 92 component pieces",
+				"Mini Cooper with monster truck tires",
+				"Ferrari with completely transparent frame and chassis",
+				"assembly kit Build-A-Car",
+				"knockoff popemobile (comes with excommunicated bishop)",
+				"ice cream truck with its jingle replaced with Gregorian chanting",
+				"horse drawn carriage in the shape of a pumpkin (return before midnight)",
+				"non-Euclidean LoveCraft which moves without seeming to occupy any one particular space at any time",
+				"giant tarantula robot",
+				"limousine made of human bones",
+				"family sedan with every machine noise replaced with a human voice approximation",
+				"fully automated car with malevolent AI trapped inside",
+				"hot air balloon filled with hydrogen",
+				"serpentine junk heap animated by the will of Quetzalcoatl",
+				"nuclear powered 1950s \"Car of the future.\" Don't crash!",
+				"magic carpet bought from Sears",
+				"stolen hotel luggage cart (it's complimentary!)",
+				"giant amoeba with enzyme controls in the center",
+				"CGI war elephant from the set of \"300\"",
+				"whaling schooner currently being hunted for crimes against whaledom",
+				"lunar rover used in 1969 (you have to go fetch it yourself though)",
+				"transforming cube that can reconfigure itself into a washing machine, ping pong table or skateboard",
+				"white chocolate Hershey's \"Cookie's 'n Car\" (doesn't run, but tastes delicious)",
+				"former presidential airliner with the soul of Richard Nixon locked in the mini-fridge",
+				"thirteen seater bike formerly owned by the Dallas Cowboys",
+				"hovercar (batteries last 30 minutes)",
+				"Porta-Pooly (a mobile pool services truck with poor naming sense)",
+				"thick swarm of sorcerous, eerily silent rats",
+				"viking funeral barge which silently bursts into flame after a journey",
+				"binary bus (two speeds: stopped or 100 mph)",
+				"giant worm",
+				"surprisingly spacious clown car",
+				"pair of roller-stilts",
+				"extremely long red carpet",
+				"anti-gravity nanobot cluster",
+				"extensive catapult-net system",
+				"squeaky shopping cart"
+			};
+
+			if (color1 == "red")
+			{
+				switch (color2)
+				{
+					case "red":
+						num = 0;
+						break;
+					case "orange":
+						num = 1;
+						break;
+					case "yellow":
+						num = 2;
+						break;
+					case "green":
+						num = 3;
+						break;
+					case "blue":
+						num = 4;
+						break;
+					case "indigo":
+						num = 5;
+						break;
+					case "violet":
+						num = 6;
+						break;
+					default:
+						break;
+				}
+			}
+			else if (color1 == "orange")
+			{
+				switch (color2)
+				{
+					case "red":
+						num = 7;
+						break;
+					case "orange":
+						num = 8;
+						break;
+					case "yellow":
+						num = 9;
+						break;
+					case "green":
+						num = 10;
+						break;
+					case "blue":
+						num = 11;
+						break;
+					case "indigo":
+						num = 12;
+						break;
+					case "violet":
+						num = 13;
+						break;
+					default:
+						break;
+				}
+			}
+			else if (color1 == "yellow")
+			{
+				switch (color2)
+				{
+					case "red":
+						num = 14;
+						break;
+					case "orange":
+						num = 15;
+						break;
+					case "yellow":
+						num = 16;
+						break;
+					case "green":
+						num = 17;
+						break;
+					case "blue":
+						num = 18;
+						break;
+					case "indigo":
+						num = 19;
+						break;
+					case "violet":
+						num = 20;
+						break;
+					default:
+						break;
+				}
+			}
+			else if (color1 == "green")
+			{
+				switch (color2)
+				{
+					case "red":
+						num = 21;
+						break;
+					case "orange":
+						num = 22;
+						break;
+					case "yellow":
+						num = 23;
+						break;
+					case "green":
+						num = 24;
+						break;
+					case "blue":
+						num = 25;
+						break;
+					case "indigo":
+						num = 26;
+						break;
+					case "violet":
+						num = 27;
+						break;
+					default:
+						break;
+				}
+			}
+			else if (color1 == "blue")
+			{
+				switch (color2)
+				{
+					case "red":
+						num = 28;
+						break;
+					case "orange":
+						num = 29;
+						break;
+					case "yellow":
+						num = 30;
+						break;
+					case "green":
+						num = 31;
+						break;
+					case "blue":
+						num = 32;
+						break;
+					case "indigo":
+						num = 33;
+						break;
+					case "violet":
+						num = 34;
+						break;
+					default:
+						break;
+				}
+			}
+			else if (color1 == "indigo")
+			{
+				switch (color2)
+				{
+					case "red":
+						num = 35;
+						break;
+					case "orange":
+						num = 36;
+						break;
+					case "yellow":
+						num = 37;
+						break;
+					case "green":
+						num = 38;
+						break;
+					case "blue":
+						num = 39;
+						break;
+					case "indigo":
+						num = 40;
+						break;
+					case "violet":
+						num = 41;
+						break;
+					default:
+						break;
+				}
+			}
+			else if (color1 == "violet")
+			{
+				switch (color2)
+				{
+					case "red":
+						num = 42;
+						break;
+					case "orange":
+						num = 43;
+						break;
+					case "yellow":
+						num = 44;
+						break;
+					case "green":
+						num = 45;
+						break;
+					case "blue":
+						num = 46;
+						break;
+					case "indigo":
+						num = 47;
+						break;
+					case "violet":
+						num = 48;
+						break;
+					default:
+						break;
+				}
+			}
+			return vehicles[num];
+		}
 	}
 }
-
